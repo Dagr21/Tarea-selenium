@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+
 
 namespace Tarea_selenium
 {
@@ -17,12 +15,29 @@ namespace Tarea_selenium
             IWebDriver driver = new ChromeDriver(options);
             System.Threading.Thread.Sleep(3000);
 
+            string imagesFolderPath = @"C:\Users\sacoc\Desktop\prog 3\Tarea selenium\fotos";
+
+            // Verificar si la carpeta existe, si no, crearla
+            if (!Directory.Exists(imagesFolderPath))
+            {
+                Directory.CreateDirectory(imagesFolderPath);
+            }
+
+            Action<string> takeScreenshot = (fileName) =>
+            {
+                var screenshot = ((ITakesScreenshot)driver).GetScreenshot();
+                string filePath = Path.Combine(imagesFolderPath, fileName);
+                screenshot.SaveAsFile(filePath);
+            };
+
             // Prueba 1: Buscar en Google
             driver.Navigate().GoToUrl("https://www.google.com");
             IWebElement searchBoxGoogle = driver.FindElement(By.Name("q"));
             searchBoxGoogle.SendKeys("cómo hacer pan casero");
             searchBoxGoogle.SendKeys(Keys.Enter);
             System.Threading.Thread.Sleep(5000);
+            takeScreenshot("Prueba1.png");
+
 
             // Prueba 2: Ingresar a Wikipedia
             driver.Navigate().GoToUrl("https://www.wikipedia.org");
@@ -30,6 +45,9 @@ namespace Tarea_selenium
             searchBoxWiki.SendKeys("Inteligencia Artificial");
             searchBoxWiki.SendKeys(Keys.Enter);
             System.Threading.Thread.Sleep(5000);
+            takeScreenshot("Prueba2.png");
+
+
 
             // Prueba 3: Buscar en YouTube
             driver.Navigate().GoToUrl("https://www.youtube.com");
@@ -37,6 +55,8 @@ namespace Tarea_selenium
             searchBoxYouTube.SendKeys("cómo hacer pan");
             searchBoxYouTube.SendKeys(Keys.Enter);
             System.Threading.Thread.Sleep(5000);
+            takeScreenshot("Prueba3.png");
+
 
             // Prueba 4: Buscar en Amazon
             driver.Navigate().GoToUrl("https://www.amazon.com");
@@ -44,6 +64,8 @@ namespace Tarea_selenium
             searchBoxAmazon.SendKeys("cámara digital");
             searchBoxAmazon.SendKeys(Keys.Enter);
             System.Threading.Thread.Sleep(5000);
+            takeScreenshot("Prueba4.png");
+
 
             // Prueba 5: Interactuar con IMDb
             driver.Navigate().GoToUrl("https://www.imdb.com");
@@ -51,6 +73,8 @@ namespace Tarea_selenium
             searchBoxIMDb.SendKeys("Titanic");
             searchBoxIMDb.SendKeys(Keys.Enter);
             System.Threading.Thread.Sleep(5000);
+            takeScreenshot("Prueba5.png");
+
 
         }
     } 
